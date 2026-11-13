@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lost and Found Portal – College Campus</title>
+  <!-- Google Fonts (Inter) & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            campus: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- ==================== NAVIGATION BAR ==================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 sm:h-20">
+        <!-- Brand Logo -->
+        <a href="#" data-target="home" class="flex items-center gap-3 text-campus-600 hover:text-campus-700 transition">
+          <div class="w-10 h-10 rounded-xl bg-campus-600 text-white flex items-center justify-center shadow-md shadow-campus-600/20">
+            <i class="fa-solid fa-magnifying-glass-location text-lg"></i>
+          </div>
+          <div>
+            <span class="font-bold text-lg sm:text-xl tracking-tight text-slate-900 block leading-none">Lost and Found Portal</span>
+            <span class="text-xs font-medium text-slate-500 hidden sm:block">College Campus Recovery Hub</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-2 lg:gap-4" id="desktopNav">
+          <a href="#" data-target="home" class="nav-link active px-3 py-2 rounded-lg text-sm font-semibold text-campus-600 bg-campus-50 transition">Home</a>
+          <a href="#" data-target="report-lost" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-campus-600 hover:bg-slate-50 transition">Report Lost</a>
+          <a href="#" data-target="report-found" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-campus-600 hover:bg-slate-50 transition">Report Found</a>
+          <a href="#" data-target="browse" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-campus-600 hover:bg-slate-50 transition">Browse Items</a>
+          <a href="#" data-target="admin" id="adminNavLinkDesktop" class="nav-link hidden px-3 py-2 rounded-lg text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 transition">
+            <i class="fa-solid fa-shield-halved mr-1"></i> Admin Dashboard
+          </a>
+          <a href="#" data-target="auth" id="authNavLinkDesktop" class="ml-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-campus-600 text-white hover:bg-campus-700 shadow-sm transition">
+            Login
+          </a>
+        </nav>
+
+        <!-- Mobile Hamburger Button -->
+        <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 focus:outline-none" aria-label="Toggle Menu">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-5 space-y-2 shadow-lg">
+      <a href="#" data-target="home" class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-semibold text-campus-600 bg-campus-50">Home</a>
+      <a href="#" data-target="report-lost" class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Report Lost</a>
+      <a href="#" data-target="report-found" class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Report Found</a>
+      <a href="#" data-target="browse" class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Browse Items</a>
+      <a href="#" data-target="admin" id="adminNavLinkMobile" class="mobile-nav-link hidden px-4 py-2.5 rounded-xl text-sm font-semibold text-amber-700 bg-amber-50">
+        <i class="fa-solid fa-shield-halved mr-1"></i> Admin Dashboard
+      </a>
+      <a href="#" data-target="auth" id="authNavLinkMobile" class="block text-center mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold bg-campus-600 text-white">
+        Login
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== MAIN CONTENT AREA ==================== -->
+  <main class="flex-1">
+
+    <!-- ==================== 1. HOME SECTION ==================== -->
+    <section id="home" class="page-section block">
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-br from-white via-campus-50/70 to-blue-100/50 border-b border-slate-200/80 py-12 sm:py-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 text-center lg:text-left">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-campus-100 text-campus-700 text-xs sm:text-sm font-semibold mb-5">
+              <i class="fa-solid fa-graduation-cap"></i> Official Campus Recovery Network
+            </span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
+              Lost Something? <span class="text-campus-600">Let's Help You Find It!</span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+              Misplaced your student ID card, headphones, textbook, or water bottle anywhere on campus? Report missing belongings or connect with fellow students to return found items safely.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <button data-target="report-lost" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-campus-600 hover:bg-campus-700 text-white font-semibold shadow-md shadow-campus-600/20 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-exclamation"></i> Report Lost Item
+              </button>
+              <button data-target="report-found" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-campus-50 text-campus-700 border-2 border-campus-600 font-semibold transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart"></i> Report Found Item
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom SVG Campus Illustration -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="w-full max-w-md bg-white/80 backdrop-blur p-4 rounded-3xl shadow-xl shadow-blue-900/5 border border-white">
+              <svg viewBox="0 0 500 370" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto rounded-2xl">
+                <defs>
+                  <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#eff6ff"/>
+                    <stop offset="100%" stop-color="#dbeafe"/>
+                  </linearGradient>
+                </defs>
+                <rect width="500" height="370" rx="20" fill="url(#bgGrad)" />
+                <circle cx="420" cy="70" r="45" fill="#bfdbfe" opacity="0.6"/>
+                <circle cx="75" cy="300" r="55" fill="#bfdbfe" opacity="0.6"/>
+
+                <!-- Campus Building Silhouette -->
+                <rect x="135" y="45" width="230" height="80" rx="10" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+                <polygon points="125,48 250,15 375,48" fill="#2563eb"/>
+                <rect x="232" y="80" width="36" height="45" rx="4" fill="#dbeafe"/>
+                <rect x="160" y="65" width="24" height="24" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+                <rect x="316" y="65" width="24" height="24" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+
+                <!-- Floating Lost Item Card -->
+                <g transform="translate(55, 115)">
+                  <rect width="215" height="115" rx="16" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"/>
+                  <rect x="16" y="20" width="52" height="52" rx="12" fill="#fee2e2"/>
+                  <text x="42" y="53" font-size="26" text-anchor="middle">🎧</text>
+                  <rect x="82" y="25" width="110" height="12" rx="6" fill="#1e293b"/>
+                  <rect x="82" y="46" width="80" height="10" rx="5" fill="#94a3b8"/>
+                  <rect x="16" y="84" width="68" height="20" rx="10" fill="#fee2e2"/>
+                  <text x="50" y="98" font-size="10" font-weight="bold" text-anchor="middle" fill="#dc2626">LOST</text>
+                </g>
+
+                <!-- Floating Found Item Card -->
+                <g transform="translate(220, 200)">
+                  <rect width="225" height="120" rx="16" fill="#ffffff" stroke="#60a5fa" stroke-width="2"/>
+                  <rect x="16" y="22" width="52" height="52" rx="12" fill="#dcfce7"/>
+                  <text x="42" y="55" font-size="26" text-anchor="middle">🪪</text>
+                  <rect x="82" y="27" width="120" height="12" rx="6" fill="#1e293b"/>
+                  <rect x="82" y="48" width="85" height="10" rx="5" fill="#94a3b8"/>
+                  <rect x="16" y="88" width="76" height="20" rx="10" fill="#dcfce7"/>
+                  <text x="54" y="102" font-size="10" font-weight="bold" text-anchor="middle" fill="#16a34a">FOUND</text>
+                </g>
+
+                <!-- Magnifying Glass Icon -->
+                <circle cx="385" cy="135" r="34" fill="#ffffff" stroke="#2563eb" stroke-width="6"/>
+                <line x1="410" y1="160" x2="438" y2="188" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+                <path d="M373 135 L382 144 L398 126" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Statistics Cards -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 sm:-mt-10 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center text-2xl shrink-0">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div>
+              <p id="statLost" class="text-3xl font-extrabold text-slate-900">0</p>
+              <p class="text-sm font-medium text-slate-500">Lost Items Reported</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl shrink-0">
+              <i class="fa-solid fa-box-open"></i>
+            </div>
+            <div>
+              <p id="statFound" class="text-3xl font-extrabold text-slate-900">0</p>
+              <p class="text-sm font-medium text-slate-500">Found Items Reported</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-campus-50 text-campus-600 flex items-center justify-center text-2xl shrink-0">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <p id="statReturned" class="text-3xl font-extrabold text-slate-900">0</p>
+              <p class="text-sm font-medium text-slate-500">Items Successfully Returned</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recently Reported on Campus Preview -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Recently Reported on Campus</h2>
+            <p class="text-sm text-slate-500 mt-1">Latest lost and found reports submitted by students and staff.</p>
+          </div>
+          <a href="#" data-target="browse" class="inline-flex items-center gap-2 text-sm font-semibold text-campus-600 hover:text-campus-700">
+            Browse All Items <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div id="recentItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. REPORT LOST ITEM SECTION ==================== -->
+    <section id="report-lost" class="page-section hidden py-10 sm:py-14">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 sm:p-10">
+          <div class="border-b border-slate-100 pb-6 mb-6">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-3 py-1 rounded-full mb-2">
+              <i class="fa-solid fa-circle-exclamation"></i> Missing Belonging
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Report a Lost Item</h2>
+            <p class="text-sm text-slate-500 mt-1">Fill out the details below so anyone who spots your item can contact you right away.</p>
+          </div>
+
+          <form id="lostItemForm" class="space-y-5" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="lostName" class="block text-sm font-semibold text-slate-700 mb-1.5">Item Name *</label>
+                <input type="text" id="lostName" placeholder="e.g., Blue Dell Laptop Charger" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+
+              <div>
+                <label for="lostCategory" class="block text-sm font-semibold text-slate-700 mb-1.5">Item Category *</label>
+                <select id="lostCategory" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required>
+                  <option value="">Select Category</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="ID Cards & Documents">ID Cards & Documents</option>
+                  <option value="Books & Stationery">Books & Stationery</option>
+                  <option value="Bags & Wallets">Bags & Wallets</option>
+                  <option value="Accessories & Keys">Accessories & Keys</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="lostDate" class="block text-sm font-semibold text-slate-700 mb-1.5">Date Lost *</label>
+                <input type="date" id="lostDate" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+
+              <div>
+                <label for="lostLocation" class="block text-sm font-semibold text-slate-700 mb-1.5">Location Lost *</label>
+                <input type="text" id="lostLocation" placeholder="e.g., Central Library, 2nd Floor" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+            </div>
+
+            <div>
+              <label for="lostDescription" class="block text-sm font-semibold text-slate-700 mb-1.5">Description *</label>
+              <textarea id="lostDescription" rows="3" placeholder="Mention brand, color, stickers, serial number, or distinguishing marks..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="lostImage" class="block text-sm font-semibold text-slate-700 mb-1.5">Upload Item Image (Optional)</label>
+                <input type="file" id="lostImage" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-campus-50 file:text-campus-700 hover:file:bg-campus-100 border border-slate-300 rounded-xl p-1.5" />
+              </div>
+
+              <div>
+                <label for="lostContact" class="block text-sm font-semibold text-slate-700 mb-1.5">Contact Details (Email / Phone) *</label>
+                <input type="text" id="lostContact" placeholder="e.g., rahul.cs24@college.edu | 9876543210" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-campus-600 hover:bg-campus-700 text-white font-semibold shadow-md shadow-campus-600/20 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i> Submit Lost Item Report
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. REPORT FOUND ITEM SECTION ==================== -->
+    <section id="report-found" class="page-section hidden py-10 sm:py-14">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 sm:p-10">
+          <div class="border-b border-slate-100 pb-6 mb-6">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-2">
+              <i class="fa-solid fa-hand-holding-heart"></i> Found on Campus
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Report a Found Item</h2>
+            <p class="text-sm text-slate-500 mt-1">Thank you for helping a fellow student! Share where you found the item and how to reach you.</p>
+          </div>
+
+          <form id="foundItemForm" class="space-y-5" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="foundName" class="block text-sm font-semibold text-slate-700 mb-1.5">Item Name *</label>
+                <input type="text" id="foundName" placeholder="e.g., Casio fx-991EX Scientific Calculator" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+
+              <div>
+                <label for="foundCategory" class="block text-sm font-semibold text-slate-700 mb-1.5">Item Category *</label>
+                <select id="foundCategory" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required>
+                  <option value="">Select Category</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="ID Cards & Documents">ID Cards & Documents</option>
+                  <option value="Books & Stationery">Books & Stationery</option>
+                  <option value="Bags & Wallets">Bags & Wallets</option>
+                  <option value="Accessories & Keys">Accessories & Keys</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="foundDate" class="block text-sm font-semibold text-slate-700 mb-1.5">Date Found *</label>
+                <input type="date" id="foundDate" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+
+              <div>
+                <label for="foundLocation" class="block text-sm font-semibold text-slate-700 mb-1.5">Location Found *</label>
+                <input type="text" id="foundLocation" placeholder="e.g., Main Canteen / Block B Room 204" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+            </div>
+
+            <div>
+              <label for="foundDescription" class="block text-sm font-semibold text-slate-700 mb-1.5">Description *</label>
+              <textarea id="foundDescription" rows="3" placeholder="Describe the item and mention if it was handed over to security or kept with you..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="foundImage" class="block text-sm font-semibold text-slate-700 mb-1.5">Upload Item Image (Optional)</label>
+                <input type="file" id="foundImage" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-campus-50 file:text-campus-700 hover:file:bg-campus-100 border border-slate-300 rounded-xl p-1.5" />
+              </div>
+
+              <div>
+                <label for="foundContact" class="block text-sm font-semibold text-slate-700 mb-1.5">Contact Details (Email / Phone) *</label>
+                <input type="text" id="foundContact" placeholder="e.g., priya.ec23@college.edu | 9123456780" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-campus-600 hover:bg-campus-700 text-white font-semibold shadow-md shadow-campus-600/20 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i> Submit Found Item Report
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. BROWSE ITEMS SECTION ==================== -->
+    <section id="browse" class="page-section hidden py-10 sm:py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Browse Campus Lost & Found Items</h2>
+          <p class="text-sm text-slate-500 mt-1">Search by item name, description, or location, and filter by category or status.</p>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200/80 mb-8 grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div class="md:col-span-6 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="searchInput" placeholder="Search item name, description, or campus location..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition text-sm" />
+          </div>
+
+          <div class="md:col-span-3">
+            <select id="categoryFilter" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-campus-600 outline-none text-sm font-medium text-slate-700">
+              <option value="All">All Categories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="ID Cards & Documents">ID Cards & Documents</option>
+              <option value="Books & Stationery">Books & Stationery</option>
+              <option value="Bags & Wallets">Bags & Wallets</option>
+              <option value="Accessories & Keys">Accessories & Keys</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-3">
+            <select id="statusFilter" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-campus-600 outline-none text-sm font-medium text-slate-700">
+              <option value="All">All Statuses</option>
+              <option value="Lost">Lost</option>
+              <option value="Found">Found</option>
+              <option value="Returned">Returned</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div id="browseItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+        <!-- Empty State -->
+        <div id="emptyBrowseState" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
+          <div class="w-16 h-16 rounded-2xl bg-campus-50 text-campus-600 flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="fa-regular fa-folder-open"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">No matching items found</h3>
+          <p class="text-sm text-slate-500 mt-1 mb-4">Try adjusting your search keywords or resetting the category/status filters.</p>
+          <button id="clearFiltersBtn" class="px-4 py-2 rounded-xl bg-campus-50 text-campus-700 font-semibold text-sm hover:bg-campus-100 transition">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. LOGIN & REGISTRATION SECTION ==================== -->
+    <section id="auth" class="page-section hidden py-12 sm:py-16">
+      <div class="max-w-md mx-auto px-4">
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 sm:p-8">
+          <!-- Auth Tabs -->
+          <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-xl mb-6">
+            <button id="loginTabBtn" class="py-2.5 text-sm font-semibold rounded-lg bg-white text-campus-600 shadow-sm transition">Student Login</button>
+            <button id="registerTabBtn" class="py-2.5 text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Student Register</button>
+          </div>
+
+          <!-- Student Login Form -->
+          <form id="loginForm" class="space-y-4" novalidate>
+            <div>
+              <label for="loginEmail" class="block text-sm font-semibold text-slate-700 mb-1.5">College Email *</label>
+              <input type="email" id="loginEmail" placeholder="student@college.edu" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <div>
+              <label for="loginPassword" class="block text-sm font-semibold text-slate-700 mb-1.5">Password *</label>
+              <input type="password" id="loginPassword" placeholder="Enter your password" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-campus-600 hover:bg-campus-700 text-white font-semibold shadow-md shadow-campus-600/20 transition">
+              Sign In
+            </button>
+
+            <div class="mt-4 p-3.5 rounded-xl bg-campus-50 border border-campus-100 text-xs text-campus-800">
+              <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Built-in Demo Admin Account:</p>
+              <p>Email: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-campus-200">admin@college.edu</code></p>
+              <p class="mt-1">Password: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-campus-200">admin123</code></p>
+            </div>
+          </form>
+
+          <!-- Student Registration Form -->
+          <form id="registerForm" class="space-y-4 hidden" novalidate>
+            <div>
+              <label for="regName" class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name *</label>
+              <input type="text" id="regName" placeholder="e.g., Ananya Sharma" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <div>
+              <label for="regRoll" class="block text-sm font-semibold text-slate-700 mb-1.5">Roll Number *</label>
+              <input type="text" id="regRoll" placeholder="e.g., 23CS104" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <div>
+              <label for="regEmail" class="block text-sm font-semibold text-slate-700 mb-1.5">College Email *</label>
+              <input type="email" id="regEmail" placeholder="ananya@college.edu" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <div>
+              <label for="regPassword" class="block text-sm font-semibold text-slate-700 mb-1.5">Password (min 6 characters) *</label>
+              <input type="password" id="regPassword" placeholder="Create a password" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-campus-600 focus:ring-2 focus:ring-campus-600/20 outline-none transition" required />
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-campus-600 hover:bg-campus-700 text-white font-semibold shadow-md shadow-campus-600/20 transition">
+              Create Student Account
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. ADMIN DASHBOARD SECTION ==================== -->
+    <section id="admin" class="page-section hidden py-10 sm:py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-100 px-3 py-1 rounded-full mb-2">
+              <i class="fa-solid fa-shield-halved"></i> Administrator Panel
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Manage Campus Reports</h2>
+            <p class="text-sm text-slate-500 mt-1">Update item status (Lost / Found / Returned) or remove duplicate/inappropriate submissions.</p>
+          </div>
+          <button id="resetDemoBtn" class="px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm shadow-sm transition flex items-center gap-2 self-start sm:self-auto">
+            <i class="fa-solid fa-rotate"></i> Reset Sample Data
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                  <th class="py-4 px-5">Item</th>
+                  <th class="py-4 px-5">Category</th>
+                  <th class="py-4 px-5">Location & Date</th>
+                  <th class="py-4 px-5">Reporter Contact</th>
+                  <th class="py-4 px-5">Status</th>
+                  <th class="py-4 px-5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== ITEM DETAILS MODAL ==================== -->
+  <div id="itemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 animate-[fadeIn_0.2s_ease]">
+      <div class="relative h-56 bg-slate-100">
+        <img id="modalImg" src="" alt="Item Image" class="w-full h-full object-cover" />
+        <button id="closeModalBtn" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-700 flex items-center justify-center shadow-md transition" aria-label="Close modal">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+        <span id="modalStatusBadge" class="absolute bottom-3 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm"></span>
+      </div>
+      <div class="p-6">
+        <p id="modalCategory" class="text-xs font-bold uppercase tracking-wider text-campus-600 mb-1"></p>
+        <h3 id="modalTitle" class="text-xl font-bold text-slate-900 mb-3"></h3>
+        <p id="modalDesc" class="text-sm text-slate-600 leading-relaxed mb-4"></p>
+
+        <div class="grid grid-cols-2 gap-3 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mb-4">
+          <div>
+            <span class="text-slate-400 block mb-0.5">Campus Location</span>
+            <span id="modalLocation" class="font-semibold text-slate-800"></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block mb-0.5">Date Reported</span>
+            <span id="modalDate" class="font-semibold text-slate-800"></span>
+          </div>
+        </div>
+
+        <div class="bg-campus-50 border border-campus-200 rounded-xl p-4 flex items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-semibold text-campus-700 block">Reporter Contact Information</span>
+            <span id="modalContact" class="text-sm font-bold text-slate-900 break-all"></span>
+          </div>
+          <button id="copyContactBtn" class="px-3.5 py-2 rounded-lg bg-campus-600 hover:bg-campus-700 text-white text-xs font-semibold shrink-0 transition">
+            <i class="fa-regular fa-copy mr-1"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>&copy; 2026 <strong class="text-slate-700">Lost and Found Portal – College Campus</strong>. Helping students reconnect with their belongings.</p>
+      <div class="flex items-center gap-5">
+        <a href="#" data-target="home" class="hover:text-campus-600 transition">Home</a>
+        <a href="#" data-target="browse" class="hover:text-campus-600 transition">Browse Items</a>
+        <a href="#" data-target="auth" class="hover:text-campus-600 transition">Admin / Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    // 1. Preloaded Realistic College Campus Sample Items
+    const DEFAULT_ITEMS = [
+      {
+        id: 101,
+        name: "Apple AirPods Pro (White Case)",
+        category: "Electronics",
+        description: "Misplaced my white AirPods Pro charging case with a navy blue silicone sleeve near the 1st-floor quiet study tables.",
+        date: "2026-11-10",
+        location: "Central Library – 1st Floor",
+        status: "Lost",
+        contact: "arjun.me24@college.edu | 9876543210",
+        image: "https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 102,
+        name: "College Student ID Card (CSE Dept)",
+        category: "ID Cards & Documents",
+        description: "Found a B.Tech CSE 2nd Year student ID card belonging to Sneha Nair near the main cafeteria billing counter.",
+        date: "2026-11-11",
+        location: "Main Campus Canteen",
+        status: "Found",
+        contact: "karthik.ec23@college.edu | 9123456789",
+        image: "https://images.unsplash.com/photo-1578670812003-60745e2c2ea9?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 103,
+        name: "Data Structures & Algorithms Textbook",
+        category: "Books & Stationery",
+        description: "Hardcover Introduction to Algorithms book with yellow sticky tabs left on the second-row desk after morning lecture.",
+        date: "2026-11-09",
+        location: "Academic Block A – Room 302",
+        status: "Found",
+        contact: "divya.it25@college.edu | 9988776655",
+        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 104,
+        name: "Black Wildcraft Laptop Backpack",
+        category: "Bags & Wallets",
+        description: "Contained a spiral notebook, umbrella, and steel bottle. Owner verified details and collected from security desk.",
+        date: "2026-11-08",
+        location: "Main Auditorium Lobby",
+        status: "Returned",
+        contact: "rohan.ce22@college.edu | 9001122334",
+        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    const FALLBACK_IMAGE = "https://placehold.co/600x400/eff6ff/2563eb?text=Campus+Item";
+    const STORAGE_KEYS = {
+      ITEMS: "campus_lnf_items_v1",
+      USERS: "campus_lnf_users_v1",
+      SESSION: "campus_lnf_session_v1"
+    };
+
+    // 2. LocalStorage Helpers
+    function getItems() {
+      const raw = localStorage.getItem(STORAGE_KEYS.ITEMS);
+      if (!raw) {
+        localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(DEFAULT_ITEMS));
+        return [...DEFAULT_ITEMS];
+      }
+      return JSON.parse(raw);
+    }
+
+    function saveItems(items) {
+      localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(items));
+      renderAll();
+    }
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
+    }
+
+    function getSession() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.SESSION)) || null;
+    }
+
+    // 3. Toast Notification System (Replaces alert())
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      const bgClass = type === "error" ? "bg-red-600" : "bg-slate-900";
+      const icon = type === "error" ? "fa-circle-exclamation" : "fa-circle-check";
+
+      toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `<i class="fa-solid ${icon} ${type === 'error' ? 'text-red-200' : 'text-emerald-400'}"></i><span>${message}</span>`;
+
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove("translate-y-2", "opacity-0");
+      });
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    // 4. Single-Page Navigation Logic
+    function navigateTo(sectionId) {
+      const session = getSession();
+      if (sectionId === "admin" && (!session || session.role !== "admin")) {
+        showToast("Admin access required. Please login with admin credentials.", "error");
+        sectionId = "auth";
+      }
+
+      document.querySelectorAll(".page-section").forEach(sec => {
+        sec.classList.add("hidden");
+        sec.classList.remove("block");
+      });
+
+      const target = document.getElementById(sectionId);
+      if (target) {
+        target.classList.remove("hidden");
+        target.classList.add("block");
+      }
+
+      // Highlight active link on desktop & mobile
+      document.querySelectorAll(".nav-link").forEach(link => {
+        const isActive = link.dataset.target === sectionId;
+        link.classList.toggle("text-campus-600", isActive);
+        link.classList.toggle("bg-campus-50", isActive);
+        link.classList.toggle("font-semibold", isActive);
+        link.classList.toggle("text-slate-600", !isActive);
+      });
+
+      document.querySelectorAll(".mobile-nav-link").forEach(link => {
+        const isActive = link.dataset.target === sectionId;
+        link.classList.toggle("text-campus-600", isActive);
+        link.classList.toggle("bg-campus-50", isActive);
+      });
+
+      document.getElementById("mobileMenu").classList.add("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-target]");
+      if (trigger) {
+        e.preventDefault();
+        navigateTo(trigger.dataset.target);
+      }
+    });
+
+    document.getElementById("mobileMenuBtn").addEventListener("click", () => {
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    });
+
+    // 5. Image Upload via FileReader
+    function convertImageToDataURL(inputElement) {
+      return new Promise((resolve) => {
+        const file = inputElement.files && inputElement.files[0];
+        if (!file) {
+          resolve(FALLBACK_IMAGE);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => resolve(FALLBACK_IMAGE);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // 6. Report Lost & Report Found Form Submissions
+    async function handleItemFormSubmit(e, statusType) {
+      e.preventDefault();
+      const prefix = statusType === "Lost" ? "lost" : "found";
+
+      const name = document.getElementById(`${prefix}Name`).value.trim();
+      const category = document.getElementById(`${prefix}Category`).value;
+      const date = document.getElementById(`${prefix}Date`).value;
+      const location = document.getElementById(`${prefix}Location`).value.trim();
+      const description = document.getElementById(`${prefix}Description`).value.trim();
+      const contact = document.getElementById(`${prefix}Contact`).value.trim();
+      const imageInput = document.getElementById(`${prefix}Image`);
+
+      if (!name || !category || !date || !location || !description || !contact) {
+        showToast("Please fill in all required fields marked with *.", "error");
+        return;
+      }
+
+      const imageDataUrl = await convertImageToDataURL(imageInput);
+
+      const newReport = {
+        id: Date.now(),
+        name,
+        category,
+        date,
+        location,
+        description,
+        contact,
+        status: statusType,
+        image: imageDataUrl
+      };
+
+      const items = getItems();
+      items.unshift(newReport);
+      saveItems(items);
+
+      e.target.reset();
+      showToast(`${statusType} item report posted successfully!`, "success");
+      navigateTo("browse");
+    }
+
+    document.getElementById("lostItemForm").addEventListener("submit", (e) => handleItemFormSubmit(e, "Lost"));
+    document.getElementById("foundItemForm").addEventListener("submit", (e) => handleItemFormSubmit(e, "Found"));
+
+    // 7. Rendering Cards, Statistics & Filters
+    function getStatusBadgeClasses(status) {
+      if (status === "Lost") return "bg-red-100 text-red-700";
+      if (status === "Found") return "bg-emerald-100 text-emerald-700";
+      return "bg-campus-100 text-campus-700";
+    }
+
+    function createCardHTML(item) {
+      const badgeClasses = getStatusBadgeClasses(item.status);
+      return `
+        <article class="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-lg transition duration-200 overflow-hidden flex flex-col group">
+          <div class="relative h-48 bg-slate-100 overflow-hidden">
+            <img src="${item.image}" alt="${item.name}" onerror="this.src='${FALLBACK_IMAGE}'" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-xs ${badgeClasses}">
+              ${item.status}
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col">
+            <span class="text-xs font-bold uppercase tracking-wider text-campus-600 mb-1">${item.category}</span>
+            <h3 class="text-base font-bold text-slate-900 line-clamp-1 mb-3">${item.name}</h3>
+            <div class="space-y-1.5 text-xs text-slate-500 mb-5">
+              <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-campus-600 w-3.5"></i> <span class="truncate">${item.location}</span></p>
+              <p class="flex items-center gap-2"><i class="fa-regular fa-calendar text-campus-600 w-3.5"></i> <span>${item.date}</span></p>
+            </div>
+            <button onclick="openItemModal(${item.id})" class="mt-auto w-full py-2.5 px-4 rounded-xl bg-campus-50 hover:bg-campus-600 text-campus-700 hover:text-white font-semibold text-xs transition flex items-center justify-center gap-2">
+              <i class="fa-regular fa-eye"></i> View Details & Contact
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function updateStatistics() {
+      const items = getItems();
+      document.getElementById("statLost").textContent = items.filter(i => i.status === "Lost").length;
+      document.getElementById("statFound").textContent = items.filter(i => i.status === "Found").length;
+      document.getElementById("statReturned").textContent = items.filter(i => i.status === "Returned").length;
+    }
+
+    function renderRecentItems() {
+      const recent = getItems().slice(0, 4);
+      document.getElementById("recentItemsGrid").innerHTML = recent.map(createCardHTML).join("");
+    }
+
+    function renderBrowseItems() {
+      const items = getItems();
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const category = document.getElementById("categoryFilter").value;
+      const status = document.getElementById("statusFilter").value;
+
+      const filtered = items.filter(item => {
+        const matchesQuery =
+          item.name.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          item.location.toLowerCase().includes(query);
+        const matchesCat = category === "All" || item.category === category;
+        const matchesStatus = status === "All" || item.status === status;
+        return matchesQuery && matchesCat && matchesStatus;
+      });
+
+      const grid = document.getElementById("browseItemsGrid");
+      const emptyState = document.getElementById("emptyBrowseState");
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        emptyState.classList.remove("hidden");
+      } else {
+        emptyState.classList.add("hidden");
+        grid.innerHTML = filtered.map(createCardHTML).join("");
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderBrowseItems);
+    document.getElementById("categoryFilter").addEventListener("change", renderBrowseItems);
+    document.getElementById("statusFilter").addEventListener("change", renderBrowseItems);
+    document.getElementById("clearFiltersBtn").addEventListener("click", () => {
+      document.getElementById("searchInput").value = "";
+      document.getElementById("categoryFilter").value = "All";
+      document.getElementById("statusFilter").value = "All";
+      renderBrowseItems();
+    });
+
+    // 8. Detailed Item Modal & Copy Contact
+    let activeContactText = "";
+
+    function openItemModal(itemId) {
+      const item = getItems().find(i => i.id === itemId);
+      if (!item) return;
+
+      document.getElementById("modalImg").src = item.image;
+      document.getElementById("modalImg").onerror = function() { this.src = FALLBACK_IMAGE; };
+
+      const badge = document.getElementById("modalStatusBadge");
+      badge.textContent = item.status;
+      badge.className = `absolute bottom-3 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm ${getStatusBadgeClasses(item.status)}`;
+
+      document.getElementById("modalCategory").textContent = item.category;
+      document.getElementById("modalTitle").textContent = item.name;
+      document.getElementById("modalDesc").textContent = item.description;
+      document.getElementById("modalLocation").textContent = item.location;
+      document.getElementById("modalDate").textContent = item.date;
+      document.getElementById("modalContact").textContent = item.contact;
+      activeContactText = item.contact;
+
+      const modal = document.getElementById("itemModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeItemModal() {
+      const modal = document.getElementById("itemModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeItemModal);
+    document.getElementById("itemModal").addEventListener("click", (e) => {
+      if (e.target.id === "itemModal") closeItemModal();
+    });
+
+    document.getElementById("copyContactBtn").addEventListener("click", () => {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = activeContactText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      showToast("Contact details copied to clipboard!", "success");
+    });
+
+    // 9. Student Login & Registration
+    const loginTabBtn = document.getElementById("loginTabBtn");
+    const registerTabBtn = document.getElementById("registerTabBtn");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    loginTabBtn.addEventListener("click", () => {
+      loginTabBtn.className = "py-2.5 text-sm font-semibold rounded-lg bg-white text-campus-600 shadow-sm transition";
+      registerTabBtn.className = "py-2.5 text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
+      loginForm.classList.remove("hidden");
+      registerForm.classList.add("hidden");
+    });
+
+    registerTabBtn.addEventListener("click", () => {
+      registerTabBtn.className = "py-2.5 text-sm font-semibold rounded-lg bg-white text-campus-600 shadow-sm transition";
+      loginTabBtn.className = "py-2.5 text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
+      registerForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+    });
+
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("regName").value.trim();
+      const roll = document.getElementById("regRoll").value.trim();
+      const email = document.getElementById("regEmail").value.trim().toLowerCase();
+      const password = document.getElementById("regPassword").value;
+
+      if (!name || !roll || !email || !email.includes("@")) {
+        showToast("Please provide a valid name, roll number, and college email.", "error");
+        return;
+      }
+      if (password.length < 6) {
+        showToast("Password must be at least 6 characters long.", "error");
+        return;
+      }
+
+      const users = getUsers();
+      if (users.some(u => u.email === email)) {
+        showToast("This email is already registered.", "error");
+        return;
+      }
+
+      users.push({ name, roll, email, password, role: "student" });
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      registerForm.reset();
+      showToast("Registration successful! Please sign in.", "success");
+      loginTabBtn.click();
+    });
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value;
+
+      // Built-in Demo Admin Login
+      if (email === "admin@college.edu" && password === "admin123") {
+        localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ name: "Campus Admin", email, role: "admin" }));
+        updateAuthUI();
+        loginForm.reset();
+        showToast("Logged in as Campus Administrator!", "success");
+        navigateTo("admin");
+        return;
+      }
+
+      const users = getUsers();
+      const matched = users.find(u => u.email === email && u.password === password);
+      if (!matched) {
+        showToast("Invalid college email or password.", "error");
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(matched));
+      updateAuthUI();
+      loginForm.reset();
+      showToast(`Welcome back, ${matched.name}!`, "success");
+      navigateTo("home");
+    });
+
+    function handleLogout(e) {
+      e.preventDefault();
+      localStorage.removeItem(STORAGE_KEYS.SESSION);
+      updateAuthUI();
+      showToast("You have been logged out.", "success");
+      navigateTo("home");
+    }
+
+    function updateAuthUI() {
+      const session = getSession();
+      const authDesktop = document.getElementById("authNavLinkDesktop");
+      const authMobile = document.getElementById("authNavLinkMobile");
+      const adminDesktop = document.getElementById("adminNavLinkDesktop");
+      const adminMobile = document.getElementById("adminNavLinkMobile");
+
+      if (session) {
+        const firstName = session.name.split(" ")[0];
+        authDesktop.textContent = `Logout (${firstName})`;
+        authDesktop.removeAttribute("data-target");
+        authDesktop.onclick = handleLogout;
+
+        authMobile.textContent = `Logout (${firstName})`;
+        authMobile.removeAttribute("data-target");
+        authMobile.onclick = handleLogout;
+
+        if (session.role === "admin") {
+          adminDesktop.classList.remove("hidden");
+          adminMobile.classList.remove("hidden");
+          adminMobile.classList.add("block");
+        } else {
+          adminDesktop.classList.add("hidden");
+          adminMobile.classList.add("hidden");
+          adminMobile.classList.remove("block");
+        }
+      } else {
+        authDesktop.textContent = "Login";
+        authDesktop.setAttribute("data-target", "auth");
+        authDesktop.onclick = null;
+
+        authMobile.textContent = "Login";
+        authMobile.setAttribute("data-target", "auth");
+        authMobile.onclick = null;
+
+        adminDesktop.classList.add("hidden");
+        adminMobile.classList.add("hidden");
+        adminMobile.classList.remove("block");
+      }
+    }
+
+    // 10. Admin Dashboard Management
+    function renderAdminTable() {
+      const items = getItems();
+      const tbody = document.getElementById("adminTableBody");
+
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">No reports available. Click "Reset Sample Data" to restore defaults.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = items.map(item => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="py-3.5 px-5">
+            <div class="flex items-center gap-3">
+              <img src="${item.image}" alt="${item.name}" onerror="this.src='${FALLBACK_IMAGE}'" class="w-11 h-11 rounded-lg object-cover border border-slate-200 shrink-0" />
+              <span class="font-semibold text-slate-900">${item.name}</span>
+            </div>
+          </td>
+          <td class="py-3.5 px-5 text-slate-600">${item.category}</td>
+          <td class="py-3.5 px-5">
+            <span class="text-slate-800 font-medium block">${item.location}</span>
+            <span class="text-xs text-slate-400">${item.date}</span>
+          </td>
+          <td class="py-3.5 px-5 text-slate-600 text-xs font-medium">${item.contact}</td>
+          <td class="py-3.5 px-5">
+            <select onchange="updateItemStatus(${item.id}, this.value)" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white text-slate-800 focus:border-campus-600 outline-none">
+              <option value="Lost" ${item.status === "Lost" ? "selected" : ""}>Lost</option>
+              <option value="Found" ${item.status === "Found" ? "selected" : ""}>Found</option>
+              <option value="Returned" ${item.status === "Returned" ? "selected" : ""}>Returned</option>
+            </select>
+          </td>
+          <td class="py-3.5 px-5 text-right">
+            <button onclick="deleteReport(${item.id})" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white text-xs font-semibold transition inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-trash-can"></i> Delete
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function updateItemStatus(itemId, newStatus) {
+      const updated = getItems().map(item =>
+        item.id === itemId ? { ...item, status: newStatus } : item
+      );
+      saveItems(updated);
+      showToast(`Status updated to "${newStatus}".`, "success");
+    }
+
+    function deleteReport(itemId) {
+      const remaining = getItems().filter(item => item.id !== itemId);
+      saveItems(remaining);
+      showToast("Item report removed from portal.", "success");
+    }
+
+    document.getElementById("resetDemoBtn").addEventListener("click", () => {
+      localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(DEFAULT_ITEMS));
+      renderAll();
+      showToast("Sample campus items restored!", "success");
+    });
+
+    // 11. Master Render & Initialization
+    function renderAll() {
+      updateStatistics();
+      renderRecentItems();
+      renderBrowseItems();
+      renderAdminTable();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateAuthUI();
+      renderAll();
+    });
+  </script>
+</body>
+</html>
